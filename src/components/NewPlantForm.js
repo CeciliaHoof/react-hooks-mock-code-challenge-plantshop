@@ -5,7 +5,7 @@ function NewPlantForm({plants, addPlant}) {
     name: "",
     image: "",
     price: 0,
-    id: plants.length + 1
+    // id: plants.length + 1
   })
 
   function handleChange(e){
@@ -20,7 +20,14 @@ function NewPlantForm({plants, addPlant}) {
 
   function handleSubmit(e){
     e.preventDefault();
-    addPlant([...plants, newPlant])
+    fetch('http://localhost:6001/plants',{
+      method: 'POST',
+      headers: {'content-type' : 'application/json'},
+      body: JSON.stringify(newPlant)
+    })
+      .then(resp => resp.json())
+      .then(data => addPlant([...plants, data]))
+    // addPlant([...plants, newPlant])
   }
 
   return (
