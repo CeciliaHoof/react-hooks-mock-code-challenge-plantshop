@@ -1,38 +1,27 @@
 import React, { useState } from "react";
+import EditPriceForm from "./EditPriceForm"
 
-function PlantCard({plant, plants, updatePlants}) {
+function PlantCard({plant, updatePrice, onDelete}) {
   const { image, name, price, id} = plant;
   
   const [inStock, setInStock] = useState(true)
   const [editPrice, setEditPrice] = useState(false)
-  const [newPrice, setNewPrice] = useState("")
+  
 
 
-  function displayForm(){
-    setEditPrice(!editPrice)
-  }
+  // function displayForm(){
+  //   setEditPrice(!editPrice)
+  // }
 
-  function handleNewPrice(e){
-    setNewPrice(e.target.value)
-  }
-
-  function patchPriceChange(e){
-    e.preventDefault();
-    fetch(`http://localhost:6001/plants/${id}`, {
-      method: 'PATCH',
-      headers: {'content-type' : 'application/json'},
-      body: JSON.stringify({price: parseFloat(newPrice)})
-    })
-      .then(resp => resp.json())
-      .then(data => updatePlants(plants.map(plant => plant.id === data.id ? data : plant )))
-  }
+  // function handleNewPrice(e){
+  //   setNewPrice(e.target.value)
+  // }
 
   function deletePlant(){
     fetch(`http://localhost:6001/plants/${id}`,{
       method: 'DELETE'
     })
-    const updatedPlants = plants.filter(plant => plant.id != id)
-    updatePlants(updatedPlants)
+    onDelete(plant)
   }
 
   return (
@@ -41,11 +30,9 @@ function PlantCard({plant, plants, updatePlants}) {
       <h4>{name}</h4>
       <p>Price: {price} </p>
       {editPrice ? 
-        <form onSubmit={patchPriceChange}>
-          <input type="number" name="price" step="0.01" placeholder="Price" onChange={handleNewPrice}/>
-          <button>Submit New Price</button>
-        </form> :
-        <button onClick={displayForm}>Edit Price</button>}
+        <button onClick={() => setEditPrice(!editPrice)}>Close</button> :
+        <button onClick={() => setEditPrice(!editPrice)}>Edit Price</button>}
+      {editPrice && <EditPriceForm plant={plant} updatePrice={updatePrice}/>}
       {inStock ? (
         <button className="primary" onClick={() => setInStock(false)}>In Stock</button>
       ) : (

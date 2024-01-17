@@ -1,21 +1,18 @@
 import React,{ useState } from "react";
 
-function NewPlantForm({plants, addPlant}) {
-  const [newPlant, setNewPlant] = useState({
-    name: "",
-    image: "",
-    price: 0,
-    // id: plants.length + 1
-  })
+const initialState = {
+  name: "",
+  image: "",
+  price: ""
+}
+
+function NewPlantForm({plants, onAddPlant}) {
+  const [newPlant, setNewPlant] = useState(initialState)
 
   function handleChange(e){
-    if(e.target.name === "name"){
-      setNewPlant({...newPlant, name: e.target.value})
-    } else if (e.target.name === "image"){
-      setNewPlant({...newPlant, image: e.target.value})
-    } else if (e.target.name === "price"){
-      setNewPlant({...newPlant, price: parseFloat(e.target.value)})
-    }
+    const { name, value } = e.target
+    if (name === 'price') setNewPlant({...newPlant, [name]: parseFloat(value)})
+    else {setNewPlant({...newPlant, [name]: value})}
   }
 
   function handleSubmit(e){
@@ -26,17 +23,17 @@ function NewPlantForm({plants, addPlant}) {
       body: JSON.stringify(newPlant)
     })
       .then(resp => resp.json())
-      .then(data => addPlant([...plants, data]))
-    // addPlant([...plants, newPlant])
+      .then(data => onAddPlant(data))
+    setNewPlant(initialState)
   }
 
   return (
     <div className="new-plant-form">
       <h2>New Plant</h2>
       <form onSubmit={handleSubmit}>
-        <input type="text" name="name" placeholder="Plant name" onChange={handleChange}/>
-        <input type="text" name="image" placeholder="Image URL" onChange={handleChange}/>
-        <input type="number" name="price" step="0.01" placeholder="Price" onChange={handleChange}/>
+        <input value={newPlant.name} type="text" name="name" placeholder="Plant name" onChange={handleChange}/>
+        <input value={newPlant.image} type="text" name="image" placeholder="Image URL" onChange={handleChange}/>
+        <input value={newPlant.price} type="number" name="price" step="0.01" placeholder="Price" onChange={handleChange}/>
         <button type="submit">Add Plant</button>
       </form>
     </div>
