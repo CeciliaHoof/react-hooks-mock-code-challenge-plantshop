@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function PlantCard({plant, plants, updatePrice}) {
+function PlantCard({plant, plants, updatePlants}) {
   const { image, name, price, id} = plant;
   
   const [inStock, setInStock] = useState(true)
@@ -24,7 +24,15 @@ function PlantCard({plant, plants, updatePrice}) {
       body: JSON.stringify({price: parseFloat(newPrice)})
     })
       .then(resp => resp.json())
-      .then(data => updatePrice(plants.map(plant => plant.id === data.id ? data : plant )))
+      .then(data => updatePlants(plants.map(plant => plant.id === data.id ? data : plant )))
+  }
+
+  function deletePlant(){
+    fetch(`http://localhost:6001/plants/${id}`,{
+      method: 'DELETE'
+    })
+    const updatedPlants = plants.filter(plant => plant.id != id)
+    updatePlants(updatedPlants)
   }
 
   return (
@@ -43,6 +51,7 @@ function PlantCard({plant, plants, updatePrice}) {
       ) : (
         <button>Out of Stock</button>
       )}
+      <button onClick={deletePlant}>Delete Plant from Inventory</button>
     </li>
   );
 }

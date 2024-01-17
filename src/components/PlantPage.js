@@ -10,13 +10,13 @@ function PlantPage() {
   useEffect(() => {
     fetch('http://localhost:6001/plants')
       .then(resp => resp.json())
-      .then(data => setPlantsList(data.filter(plant => plant.name.toLowerCase().includes(searchQuery))))
+      .then(data => setPlantsList(data.filter(plant => plant.name.toLowerCase().includes(searchQuery.toLowerCase()))))
   }, [searchQuery])
   return (
     <main>
       <NewPlantForm plants={plantList} addPlant={setPlantsList}/>
       <Search onSearch={setSearchQuery}/>
-      <PlantList plants={plantList} updatePrice={setPlantsList}/>
+      <PlantList plants={plantList} updatePlants={setPlantsList}/>
     </main>
   );
 }
