@@ -7,16 +7,9 @@ function PlantCard({plant, updatePrice, onDelete}) {
   const [inStock, setInStock] = useState(true)
   const [editPrice, setEditPrice] = useState(false)
   
-
-
-  // function displayForm(){
-  //   setEditPrice(!editPrice)
-  // }
-
-  // function handleNewPrice(e){
-  //   setNewPrice(e.target.value)
-  // }
-
+  function toggleInStock(){
+    setInStock(!inStock)
+  }
   function deletePlant(){
     fetch(`http://localhost:6001/plants/${id}`,{
       method: 'DELETE'
@@ -34,9 +27,9 @@ function PlantCard({plant, updatePrice, onDelete}) {
         <button onClick={() => setEditPrice(!editPrice)}>Edit Price</button>}
       {editPrice && <EditPriceForm plant={plant} updatePrice={updatePrice}/>}
       {inStock ? (
-        <button className="primary" onClick={() => setInStock(false)}>In Stock</button>
+        <button className="primary" onClick={toggleInStock}>In Stock</button>
       ) : (
-        <button>Out of Stock</button>
+        <button onClick={toggleInStock}>Out of Stock</button>
       )}
       <button onClick={deletePlant}>Delete Plant from Inventory</button>
     </li>
