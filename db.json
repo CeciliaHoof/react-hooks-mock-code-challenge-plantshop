@@ -41,6 +41,12 @@
       "name": "Fiddle Leaf Fig",
       "image": "./images/fiddle-leaf-fig.jpg",
       "price": 55
+    },
+    {
+      "name": "Pickles",
+      "image": "https://t4.ftcdn.net/jpg/02/17/25/01/360_F_217250142_U0lRHW1Bu1HJTlHRH3kb1f3qnh8WWKwq.jpg",
+      "price": "12.99",
+      "id": 8
     }
   ]
 }

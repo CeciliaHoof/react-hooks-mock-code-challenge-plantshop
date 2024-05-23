@@ -1,38 +1,33 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import NewPlantForm from "./NewPlantForm";
 import PlantList from "./PlantList";
 import Search from "./Search";
 
 function PlantPage() {
-  const [plantList, setPlantsList] = useState([])
+  const [plants, setPlants] = useState([])
   const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
     fetch('http://localhost:6001/plants')
       .then(resp => resp.json())
-      .then(data => 
-        setPlantsList(data.filter(plant => plant.name.toLowerCase().includes(searchQuery.toLowerCase()))))
-  }, [searchQuery])
+      .then(data => setPlants(data))
+  }, [])
 
-  function addPlant(newPlant){
-    setPlantsList([...plantList, newPlant])
+  function onAddPlant(plant){
+    setPlants([...plants, plant])
   }
 
-  function editPrice(plantObj){
-    const updatedPlants = plantList.map(plant => plant.id === plantObj.id ? plantObj : plant)
-    setPlantsList(updatedPlants)
+  function onSearch(query){
+    setSearchQuery(query)
   }
 
-  function deletePlant(plantObj){
-    const updatedPlants = plantList.filter(plant => plant.id !== plantObj.id)
-    setPlantsList(updatedPlants)
-  }
+  const filteredPlants = plants.filter(plant => plant.name.toLowerCase().includes(searchQuery.toLowerCase()))
 
   return (
     <main>
-      <NewPlantForm onAddPlant={addPlant}/>
-      <Search onSearch={setSearchQuery} search={searchQuery}/>
-      <PlantList plants={plantList} updatePrice={editPrice} onDelete={deletePlant}/>
+      <NewPlantForm addPlant={onAddPlant}/>
+      <Search search={onSearch} query={searchQuery}/>
+      <PlantList plants={filteredPlants }/>
     </main>
   );
 }

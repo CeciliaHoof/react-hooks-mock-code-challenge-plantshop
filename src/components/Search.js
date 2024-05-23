@@ -1,6 +1,10 @@
 import React from "react";
 
-function Search({onSearch, search}) {
+function Search({ search, query }) {
+
+  function handleChange(e){
+    search(e.target.value)
+  }
 
   return (
     <div className="searchbar">
@@ -8,9 +12,9 @@ function Search({onSearch, search}) {
       <input
         type="text"
         id="search"
-        value={search}
         placeholder="Type a name to search..."
-        onChange={(e) => (onSearch(e.target.value))}
+        value={query}
+        onChange={(e) => handleChange(e)}
       />
     </div>
   );
